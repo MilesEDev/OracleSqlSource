@@ -1,0 +1,102 @@
+Create table TUTOR(
+StaffID NUMBER(6) Primary Key,
+Staff_Firstnames VARCHAR2(30) NOT NULL,
+Staff_Surname VARCHAR2(30) NOT NULL,
+Staff_Location VARCHAR2(25) NOT NULL,
+Phone_ext NUMBER(5),
+School VARCHAR2(20) NOT NULL);
+
+
+Create table STUDENT(
+Student_ID NUMBER(8) Primary key,
+Student_Name VARCHAR2(40) NOT NULL,
+Course_Code VARCHAR2(5) NOT NULL,
+Course_Level VARCHAR2(1) NOT NULL,
+Start_date DATE NOT NULL,
+StaffID NUMBER(6) references TUTOR(StaffID));
+
+
+Create table MODULE(
+Module_ID NUMBER(6) Primary key,
+Module_Name VARCHAR2(15) NOT NULL,
+Module_Description VARCHAR2(20) NOT NULL,
+No_of_Assessments NUMBER(1) NOT NULL);
+
+
+Create table ASSESSMENT(
+Assessment_code Number(4) Primary Key,
+Assessment_Type varchar2(20) not NULL,
+Assessment_Date Date not Null,
+Module_ID number(6) references MODULE(Module_ID),
+Student_ID number(8) references STUDENT(Student_ID),
+Mark number(3) not null);
+
+Insert into TUTOR values (210, 'Sarah', 'Kumar', 'OBP02', 11345, 'Art');
+Insert into TUTOR values (433, 'Finlay', 'Johnson', 'OBP14', 11765, 'Computer Science');
+Insert into TUTOR values (761, 'Wai Leng', 'Kor', 'OBP05', 11064, 'Mathematics');
+Insert into TUTOR values (315, 'Obasi', 'Kwame', 'OBP21', 11326, 'Sport Science');
+Insert into TUTOR values (380, 'Gilbert', 'Grape', 'OBP55', 11007, 'Sport Science');
+Insert into TUTOR values (642, 'Mark', 'Hamill', 'OBP32', 11222, 'Computer Science');
+
+Insert into STUDENT values (173345, 'Daisy Harris', 'BAART', '4', '09/27/2021', 210);
+Insert into STUDENT values (198863, 'Marina Cruz', 'BSMAT', '4', '09/27/2021', 761);
+Insert into STUDENT values (189220, 'John Simmons', 'BSSSC', '6', '09/30/2019', 380);
+Insert into STUDENT values (109643, 'Ali Wahab', 'BSCSC', '5', '09/28/2020', 433);
+Insert into STUDENT values (185345, 'Danial French', 'BSCSC', '5', '09/28/2020', 642);
+Insert into STUDENT values (130952, 'Sneha Gupta', 'BSMAT', '6', '09/30/2019', 761);
+Insert into STUDENT values (156430, 'Bart Svenson', 'BSSSC', '5', '09/28/2020', 315);
+Insert into STUDENT values (123456, 'Judy Wong', 'BAART', '4', '09/27/2021', 210);
+
+Insert into MODULE values(000001,'Forensics','finding threats','2');
+Insert into MODULE values(000002,'AI','neural nets stuff','3');
+Insert into MODULE values(000003,'AI2','AI  plus transformer','2');
+Insert into MODULE values(000004,'fundamentals','useful stuff','3');
+Insert into MODULE values(000005,'Prgoramming','Programming stuff','2');
+Insert into MODULE values(000006,'AI3','AI n stuff plus RNN','3');
+
+Insert into ASSESSMENT values(0001,'assignment','01/15/2022',000005,173345,'80');
+Insert into ASSESSMENT values(0002,'assignment','01/15/2022',000005,198863,'50');
+Insert into ASSESSMENT values(0003,'assignment','03/15/2022',000001,198863,'20');
+Insert into ASSESSMENT values(0004,'assignment','03/15/2022',000001,189220,'40');
+Insert into ASSESSMENT values(0005,'Exam','03/11/2022',000001,189220,'50');
+Insert into ASSESSMENT values(0006,'Exam','03/11/2022',000001,198863,'60');
+Insert into ASSESSMENT values(0007,'Exam','05/05/2022',000003,123456,'90');
+Insert into ASSESSMENT values(0008,'Assignment','05/06/2022',000003,123456,'90');
+
+/*
+select * from TUTOR;
+select * from STUDENT;
+select * from MODULE;
+select * from ASSESSMENT;
+*/
+/*
+select Staff_Firstnames,Staff_Surname,Staff_Location,Phone_ext,School 
+from TUTOR;
+
+select Start_date 
+from STUDENT
+where Course_Level = 4;
+
+select Assessment_code,Assessment_Type,Assessment_Date
+from ASSESSMENT
+where Assessment_Date < '05/01/2022';
+*/
+
+select STUDENT.StaffID,Staff_Firstnames,Staff_Surname,Student_Name,Course_Code
+from student,tutor
+where student.StaffID = tutor.StaffID;
+
+Select distinct Student_Name,Module.Module_Name,Module.Module_Description
+from STUDENT,MODULE,ASSESSMENT
+where STUDENT.Student_ID = ASSESSMENT.Student_ID and MODULE.Module_ID = ASSESSMENT.Module_ID and student.Course_Level = '6';
+
+select sum(No_of_Assessments)
+from Student,MODULE,ASSESSMENT
+where Student.Student_ID = ASSESSMENT.Student_ID and MODULE.Module_ID = ASSESSMENT.Module_ID
+group by Student.Student_ID having sum(No_of_Assessments) > 1;
+
+
+select Student_Name,sum(Mark)
+from student,Assessment
+where Student.Student_ID = Assessment.Student_ID
+group by Student.Student_Name having sum(Mark) > (select avg(mark) from Assessment);

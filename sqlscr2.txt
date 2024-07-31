@@ -1,0 +1,110 @@
+/*DROP TABLE actor cascade constraints;
+DROP TABLE director cascade constraints;
+drop table film cascade constraints;
+drop table contract cascade constraints;*/
+
+create table actor(
+    equity_number NUMBER(8) Primary key,
+    surname varchar(15) NOT null,
+    firstnames varchar(20) not null,
+    specialism varchar(20));
+
+
+create table director(
+    director_id NUMBER(8) Primary key,
+    surname varchar(15) not null,
+    firstnames varchar(20) not null);
+
+
+
+create table film(
+    film_no NUMBER(6) PRIMARY KEY,
+    title VARCHAR(30) not null,
+    rating varchar(2) not null,
+    production_co varchar (30) not null,
+    director_id number(4) REFERENCES director(director_id));
+
+
+create table contract(
+    contract_no number(6) Primary KEY,
+    film_no number(6) REFERENCES film(film_no),
+    equity_number number(8) REFERENCES actor(equity_number),
+    contract_date DATE not null,
+    fee number(8) not null);
+
+
+/*
+
+select min(fee),max(fee),equity_number from contract group by equity_number;
+select title,rating,surname,film_no,director.director_id from director,film where director.director_id = film.director_id;
+select firstnames,surname from actor,contract where actor.equity_number = contract.equity_number and fee >= 800;
+select actor.surname,director.surname,fee,actor.equity_number from actor,film,contract,director where actor.equity_number = contract.equity_number and film.director_id = director.director_id and contract.film_no = film.film_no;
+
+select title,contract_no from film,contract where fee >= 800 and contract_date < '10/11/2015' and film.film_no = contract.film_no;
+
+
+select actor.firstnames from actor,contract,film where film.film_no = contract.film_no and actor.equity_number = contract.equity_number;
+
+select count(actor.firstnames),count(title),count(fee),actor.equity_number from actor,film,contract where actor.equity_number = contract.equity_number and contract.film_no = film.film_no and contract_date < '10/11/2015' group by actor.equity_number;
+
+select director.firstnames from director,actor,contract,film where actor.specialism = 'ACTION' and actor.equity_number = contract.equity_number and contract.film_no = film.film_no and film.director_id = director.director_id;
+*/
+select count(director_id)
+from director;
+
+select count(equity_number),specialism
+from actor
+group by specialism having count(equity_number) >1;
+select count(film_no),director.director_id 
+from film,director
+where director.director_id = film.director_id group by director.director_id having count(film_no) >= 1; 
+
+
+select count(contract_no),f.film_no
+from contract co,film f
+where co.film_no = f.film_no
+group by co.film_no having count(contract_no) >= 1; 
+
+select f.film_no,max(fee)
+from contract co, film f
+where co.film_no = f.film_no and contract_date >= '01/01/2014'
+group by co.film_no having count(contract_no) >=1;
+
+select sum(fee) as totalfees,f.film_no 
+from contract co,film f
+where co.film_no = f.film_no and contract_date <= '01/01/2014'
+group by co.film_no having count(contract_no) >=1;
+
+select count(co.equity_number) as numofactors
+from actor ac,contract co,film f
+where co.equity_number = ac.equity_number and co.film_no = f.film_no and rating = 12
+group by f.film_no;
+
+select d.firstnames || ' ' || d.surname as directorfullname,count(f.film_no) as num_of_films_done 
+from film f,director d 
+where f.director_id = d.director_id and d.firstnames || ' ' || d.surname is not null
+group by d.firstnames,d.surname having count(f.film_no) >=1;
+
+select contract_no,fee
+from contract
+where fee < (select avg(fee) from contract);
+
+select firstnames,contract_no,fee 
+from actor,contract
+where actor.equity_number = contract.equity_number and fee < (select avg(fee) from contract);
+
+select firstnames
+from actor,contract
+where actor.equity_number = contract.equity_number and fee > 100
+group by firstnames;
+
+select surname 
+from director d,film f  
+where d.director_id = f.director_id and f.film_no in (select co.film_no from actor ac,contract co  where ac.equity_number =co.equity_number and ac.surname = 'sur')
+group by surname;
+
+select firstnames
+from actor ac,contract co
+where ac.equity_number = co.equity_number and co.contract_no in (select co.contract_no from contract co,film f where co.film_no = f.film_no and f.production_co = 'Warnar') 
+group by firstnames;
+

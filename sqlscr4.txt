@@ -1,0 +1,21 @@
+Insert INTO director VAlUES('101','Redford','Robert');
+Insert INTO director VAlUES('102','ford','john');
+insert into director values('103','stevenson','steve');
+insert into director values('104','jeff','jeffington');
+insert into director values ('105','meh','meeeh');
+
+insert into actor values('001','sur','name','COMEDY');
+insert into actor values('002','name','sur','ACTION');
+insert into actor values ('003','nursur','surnur','ACTION');
+insert into actor values('004','somename','some other name','HORROR');
+insert into actor values('005','another','Ithink?','ACTION');
+
+INSERT INTO film VALUES ('1009','The Horse Whisperer','12','Warnar','101');
+INSERT INTO film VALUES ('1020','bleh','12','mye','102');
+insert into film values('1030','blah','12','meh','103');
+insert into film values('1031','roar','15','aah!','104');
+
+insert into contract values('2222','1020','001','06/02/2003','55567');
+insert into contract values('2221','1030','001','06/02/2003','300');
+insert into contract values('2223','1031','003','06/02/2003','55567');
+insert into contract values('2224','1009','004','06/02/2003','55567');

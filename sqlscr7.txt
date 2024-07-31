@@ -1,0 +1,41 @@
+--always drop tables first to prevent error messages during development
+drop table cars;
+drop table buy;
+drop table models;
+drop table car_customer;
+
+--types used are VARCHAR2 and NUMBER with and without decimal places
+create table models (
+MODELNO VARCHAR2(5) PRIMARY KEY,
+MAKE VARCHAR2(20),
+MODELNAME VARCHAR2(20),
+DOORS NUMBER(1),
+LITRES NUMBER(5,3)
+);
+
+create table cars (
+ENGINENO NUMBER(8) PRIMARY KEY, 
+MODELNO VARCHAR2(5), 
+COLOUR VARCHAR2(20)
+);
+
+create table car_customer(
+CUSTNO VARCHAR2(6) PRIMARY KEY,
+CUSTNAME VARCHAR2(35),
+CUSTADD1 VARCHAR2(35),
+CUSTADD2 VARCHAR2(35),
+CUSTADD3 VARCHAR2(35),
+CUSTADD4 VARCHAR2(35),
+CUSTPC VARCHAR2(10)
+);
+
+create table buy (
+ENGINENO NUMBER(8) PRIMARY KEY,
+REGNO VARCHAR2(8),
+CUSTNO VARCHAR2(6),
+PURCH_YY NUMBER(2),
+PURCH_MM NUMBER(2),
+PURCH_DD NUMBER(2),
+SELLPRICE NUMBER(8,2)
+);
+

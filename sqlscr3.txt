@@ -1,0 +1,66 @@
+--create the animal table
+DROP TABLE animal cascade constraints;
+CREATE TABLE animal(
+animalno	NUMBER(6) PRIMARY KEY,
+animalname	VARCHAR2(15),
+sex		VARCHAR2(6),
+age		NUMBER(2),
+species		VARCHAR2(12));
+
+--create the drug table
+DROP TABLE drug cascade constraints;
+CREATE TABLE drug(
+drugno		 NUMBER(6) PRIMARY KEY,
+drugtype	 VARCHAR2(20),
+drug_description VARCHAR2(20),
+quantity	 NUMBER(3));
+
+--create the treatment table
+DROP TABLE  treatment cascade constraints;
+CREATE TABLE treatment(
+treatmentno		NUMBER(6) PRIMARY KEY,
+treatmentdate		DATE,
+description		VARCHAR2(35),
+animalno		NUMBER(6) REFERENCES animal(animalno));
+
+
+--create the drugusage table here after the DROP TABLE COMMAND
+DROP TABLE drugusage cascade constraints;
+CREATE TABLE drugusage(
+    drugusageno number(6) PRIMARY KEY,
+    treatmentno number(6) REFERENCES treatment(treatmentno),
+    drugno number(6) REFERENCES drug(drugno),
+    drugqauntity varchar2(20),
+    instructions varchar2(30));
+--Task 2 insert data into system
+--Data for 2 drugs is below DO NOT INSERT ANY MORE DRUGS
+INSERT INTO drug VALUES ('001','Antibiotic','PenicillinA',33);
+INSERT INTO drug VALUES ('002','Antibiotic wipe','PenicillinB',50);
+--insert the 4 animals data into the system there are no foreign keys
+insert into animal values('001','jeff','male','9','chameleon');
+insert into animal values('002','james','male','10','dog');
+insert into animal values('003','female-james','female','1','cat');
+insert into animal values('004','female-jeff','female','2','sheep');
+--insert the 4 treatments data into the system note there is a foreign key on animalno
+insert into treatment values('001','01/02/2004','has allergies','002');
+insert into treatment values('002','05/04/2004','has leg pain','001');
+insert into treatment values('003','08/09/2006','has arm pain','003');
+insert into treatment values('004','09/12/2016','has neck pain','004');
+--insert the 3 drugusage data rows into the system
+--there are 2 foreign keys one on drugno and one on treatmentno
+insert into drugusage values('001','001','001','5','to be swallowed');
+insert into drugusage values('002','003','002','2','injected');
+insert into drugusage values('003','004','001','7','drank');
+-- select all
+select * from drug;
+select * from animal;
+select * from treatment;
+select * from drugusage;
+--select fields
+select drug.drugno,drug.drugtype,drugqauntity from drug,drugusage 
+where drug.drugno = drugusage.drugno;
+
+select animalname from animal;
+select treatmentno,treatmentdate from treatment 
+where treatmentdate > '01/11/2015';
+

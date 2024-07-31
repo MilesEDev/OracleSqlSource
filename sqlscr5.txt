@@ -1,0 +1,37 @@
+DROP TABLE faculty cascade constraints;
+create table faculty(
+    facultyID number(4) Primary key,
+    facultyname varchar(24) not null,
+    dean varchar(24) not null);
+drop table room cascade constraints;
+create table room(
+    RoomNo number(4) Primary key,
+    roomsize varchar(24));
+    
+drop table tutor cascade constraints;
+create table tutor(
+    staffID number(8),
+    surname varchar(24),
+    firstname varchar(16),
+    telno varchar(16),
+    facultyID number(4) references faculty(facultyID),
+    RoomNo number(4) references room(RoomNo));
+    
+
+    
+insert into faculty values('574','jeigrgrtghow','bhtegtrgrsbfrgty');
+insert into faculty values('572','jeiggtrghow','bhtersewefbfrgty');
+insert into room values('78','Single');
+insert into room values('94','Single');
+insert into room values('23','Multiple shared');
+insert into tutor values('578473','gehfev','gfjhtffgvcsw','133_444_655','574','23');
+insert into tutor values('578473','gehsfev','gfjhtfffvcsw','133_444_655','572','94');
+insert into tutor values('578473','gefhev','gfjhstffvcsw','133_444_655','574','23');
+insert into tutor values('578473','gefewfewhev','gfjhddtfvcsw','133_444_655','572','78');
+
+select roomsize,count(roomsize) from room group by roomsize;
+select facultyname,firstname,faculty.facultyID from faculty,tutor group by faculty.facultyID;
+
+select facultyname,count(*)
+from faculty natural join tutor
+group by facultyname;

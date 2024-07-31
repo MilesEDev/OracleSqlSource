@@ -1,0 +1,48 @@
+--create the tables
+--MAKE SURE PRIMARY AND FOREIGN KEYS ARE INCLUDED
+
+DROP TABLE course cascade Constraints;
+CREATE TABLE course
+(
+course_id	VARCHAR2(6) PRIMARY KEY,
+coursename	VARCHAR2(25),
+faculty		VARCHAR2(20));
+
+DROP TABLE acoach CASCADE CONSTRAINTS;
+CREATE TABLE acoach
+(
+staff_id	VARCHAR2(6) PRIMARY KEY,
+surname		VARCHAR2(15),
+first_names	VARCHAR2(20),
+extension	VARCHAR2(5),
+roomno		VARCHAR2(6));
+
+DROP TABLE student CASCADE CONSTRAINTS;
+CREATE TABLE student
+(
+student_id	VARCHAR2(6),
+surname		VARCHAR2(15),
+first_names	VARCHAR2(20),
+mobile		VARCHAR2(12),
+course		VARCHAR2(15) REFERENCE course(course_id),
+academic_coach	VARCHAR2(6) REFERENCES acoach(staff_id));
+
+DROP TABLE module CASCADE CONSTAINTS;
+CREATE TABLE module
+(
+module_id	VARCHAR2(6) PRIMARY KEY,
+module_name	VARCHAR2(15),
+credit_points	NUMBERS(2));
+
+DROP TABLE study CASCADE CONSTRAINTS;
+CREATE TABLE study
+(
+student_id	VARCHAR2(6) REFERENCES student(student_id),
+module_id	VARCHAR2(15) REFERENCES module(module_id),
+startdate	DATE(10),
+attendance	NUMBER(3),
+result		NUMBER(3),
+PRIMARY KEY (student_id, module_id));
+
+
+
